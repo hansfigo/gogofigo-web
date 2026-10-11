@@ -265,3 +265,27 @@ a {
     animation: none !important;
   }
 }
+
+/* Desktop: the nav becomes a fixed left column; content sits to its right. */
+@media (min-width: 64rem) {
+  :root {
+    --nav-height: 0rem;
+  }
+
+  main {
+    margin-left: var(--side-width);
+  }
+
+  main .container {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+/* Desktop: first line of every page lines up with the wordmark in the side nav. */
+@media (min-width: 64rem) {
+  main > :first-child,
+  main > .visually-hidden + * {
+    padding-top: var(--space-8) !important;
+  }
+}

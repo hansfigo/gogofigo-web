@@ -2,7 +2,7 @@
 import { site, socials } from '../config/site';
 ---
 
-<footer class="footer container">
+<footer class="footer site-footer container">
   <span>© {new Date().getFullYear()} {site.name}</span>
   <ul>
     {
@@ -45,5 +45,12 @@ import { site, socials } from '../config/site';
 
   a:hover {
     color: var(--fg);
+  }
+
+  /* Desktop shows these links in the side nav instead. */
+  @media (min-width: 64rem) {
+    .footer {
+      display: none;
+    }
   }
 </style>

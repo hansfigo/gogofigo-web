@@ -48,6 +48,8 @@ public/_headers         Cloudflare caching headers
 Concept: "white box" artist portfolio. Quiet off-white room, art is the only focus, almost no text.
 Figo's feedback (2026-10-11): the first version felt like a company profile. Keep copy to a minimum:
 no section headings, no CTA blocks, no uppercase label clutter. Captions are tiny (title + year).
+Navigation: on desktop a fixed left column (wordmark, tagline, Work/Info/Commission, socials at the bottom),
+no bar, blur or border. On phones a plain text line at the top that scrolls away.
 Home *is* the work: an editorial grid where works drift between columns with lots of air.
 
 - **Color (light / dark):** `--bg` #f7f7f4 / #0c0c0d (never pure white/black), `--fg` #111113 / #ededeb, grays `--gray-1…6`, `--hairline` for 1px UI lines.
