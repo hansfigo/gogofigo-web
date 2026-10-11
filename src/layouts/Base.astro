@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/Seo.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CubeField from '../components/CubeField.astro';
 import Monolith from '../components/Monolith.astro';
 import { site } from '../config/site';
 import '../styles/global.css';
@@ -60,6 +61,7 @@ const pageFade = {
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <CubeField />
     <Nav />
     <main id="main" transition:animate={pageFade}>
       <slot />

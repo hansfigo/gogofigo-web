@@ -32,7 +32,7 @@ src/
   lib/works.ts          getWorks(), getFeaturedWorks(), workUrl(), mediumLabel
   lib/events.ts         getEvents() → { upcoming, past }, formatEventDate()
   layouts/Base.astro    <head>, SEO, nav, footer, client router, page transition
-  components/           Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
+  components/           CubeField, Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
                         GalleryFilter, Lightbox, Placeholder
   scripts/motion.ts     GSAP setup, shared easing, reduced-motion check
   scripts/reveal.ts     square-tile reveal for work images (imported by WorkGrid)
@@ -55,7 +55,9 @@ no bar, blur or border. On phones a plain text line at the top that scrolls away
 NieR-style accents (Figo, 2026-10-11): cool off-white palette, square corners everywhere, a small
 square as the only UI marker (current nav item, active filter, commission status), white block
 "monolith" SVG decorations (components/Monolith.astro: tower on Info/Commission/404 desktop,
-skyline on phones and at the end of Home), and images revealed by a grid of shrinking squares.
+skyline on phones and at the end of Home), images revealed by a grid of shrinking squares, and a few
+faint cubes floating in the background (components/CubeField.astro, fixed layer, scroll parallax in
+vanilla JS, 3 on phones / 7 on desktop). Keep them faint and few; they must never compete with the art.
 Home *is* the work: an editorial grid where works drift between columns with lots of air.
 
 - **Color (light / dark):** `--bg` #f7f7f4 / #0c0c0d (never pure white/black), `--fg` #111113 / #ededeb, grays `--gray-1…6`, `--hairline` for 1px UI lines.
