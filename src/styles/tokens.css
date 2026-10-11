@@ -20,16 +20,22 @@
   color-scheme: light dark;
 
   /* Color: light */
-  --bg: #f7f7f4;
+  --bg: #f4f5f6;
   --bg-elevated: #ffffff;
-  --bg-translucent: rgb(247 247 244 / 0.78);
-  --fg: #111113;
-  --gray-1: #f0f0ed;
-  --gray-2: #e6e6e2;
-  --gray-3: #c9c9c4;
-  --gray-4: #8e8e89; /* decorative only, below AA for text */
-  --gray-5: #63635f; /* secondary text, AA on --bg */
-  --gray-6: #3a3a37;
+  --bg-translucent: rgb(244 245 246 / 0.78);
+  --fg: #111214;
+  --gray-1: #eceef0;
+  --gray-2: #e1e4e7;
+  --gray-3: #c6cacf;
+  --gray-4: #8b9096; /* decorative only, below AA for text */
+  --gray-5: #5f646a; /* secondary text, AA on --bg */
+  --gray-6: #383c41;
+
+  /* Monolith blocks (NieR-like white architecture): lit top, front, shaded side */
+  --block-top: #fbfbfc;
+  --block-front: #e9ebee;
+  --block-side: #d9dde2;
+  --block-edge: rgb(17 18 20 / 0.05);
   --hairline: rgb(17 17 19 / 0.09);
   --accent: #2f4fb3; /* indigo, AA on --bg */
   --accent-soft: rgb(47 79 179 / 0.1);
@@ -81,7 +87,7 @@
   --dur-base: 400ms;
   --dur-slow: 700ms;
 
-  --radius: 6px;
+  --radius: 0; /* square everything */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -96,6 +102,10 @@
     --gray-4: #6b6b6f;
     --gray-5: #a1a1a4;
     --gray-6: #cfcfd1;
+    --block-top: #222326;
+    --block-front: #17181a;
+    --block-side: #111214;
+    --block-edge: rgb(237 237 235 / 0.06);
     --hairline: rgb(237 237 235 / 0.1);
     --accent: #7fa2ff;
     --accent-soft: rgb(127 162 255 / 0.14);

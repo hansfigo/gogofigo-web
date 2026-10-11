@@ -6,7 +6,7 @@ import { getEvents, formatEventDate } from '../lib/events';
 const { upcoming, past } = await getEvents();
 ---
 
-<Base title="Info" description={bio.join(' ')}>
+<Base title="Info" description={bio.join(' ')} monolith="tower" seed={11}>
   <div class="info container">
     <h1 class="visually-hidden">Info</h1>
     <div class="bio">

@@ -34,9 +34,23 @@ const options = [
     color: var(--fg);
   }
 
-  button[aria-pressed='true'] {
-    text-decoration: underline;
-    text-underline-offset: 0.35em;
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  button::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: currentColor;
+    transform: scale(0);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  button[aria-pressed='true']::before {
+    transform: scale(1);
   }
 </style>
 

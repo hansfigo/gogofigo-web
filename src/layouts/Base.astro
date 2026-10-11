@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/Seo.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Monolith from '../components/Monolith.astro';
 import { site } from '../config/site';
 import '../styles/global.css';
 
@@ -14,9 +15,12 @@ interface Props {
   imageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  /** Decorative white block architecture. 'tower' also draws a skyline on phones. */
+  monolith?: 'tower' | 'skyline';
+  seed?: number;
 }
 
-const props = Astro.props;
+const { monolith, seed = 7, ...props } = Astro.props;
 
 // Page transition: old content fades into the background, new content rises in softly.
 const pageFade = {
@@ -36,7 +40,7 @@ const pageFade = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#f4f5f6" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0c0c0d" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -59,6 +63,8 @@ const pageFade = {
     <Nav />
     <main id="main" transition:animate={pageFade}>
       <slot />
+      {monolith === 'tower' && <Monolith kind="tower" seed={seed} class="deco-tower" />}
+      {monolith && <Monolith kind="skyline" seed={seed + 3} class:list={['deco-skyline', { 'phone-only': monolith === 'tower' }]} />}
     </main>
     <Footer />
   </body>

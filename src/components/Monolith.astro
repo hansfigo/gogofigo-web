@@ -1,0 +1,119 @@
+---
+/**
+ * White block architecture, NieR-style: stepped towers and loose cubes drawn as flat SVG.
+ * Each block has a lit top, a front face and a shaded side, all from CSS tokens, so it
+ * follows dark mode. Purely decorative.
+ */
+interface Props {
+  kind?: 'tower' | 'skyline';
+  seed?: number;
+  class?: string;
+}
+
+const { kind = 'tower', seed = 7, class: className } = Astro.props;
+
+let s = seed * 9301 + 49297;
+const rand = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+const pick = (min: number, max: number) => min + rand() * (max - min);
+
+type Block = { x: number; y: number; w: number; h: number };
+const blocks: Block[] = [];
+const D = 6; // depth of side and top faces
+
+let W: number;
+let H: number;
+
+if (kind === 'tower') {
+  W = 260;
+  H = 560;
+  const ground = H;
+  // Stepped plinth
+  blocks.push({ x: 0, y: ground - 24, w: 260, h: 24 });
+  blocks.push({ x: 18, y: ground - 44, w: 224, h: 20 });
+  const base = ground - 44;
+  // Vertical slabs side by side: tallest in the middle, lower toward the edges
+  const slabs: Block[] = [];
+  let x = 34;
+  const centre = 130;
+  while (x < 226) {
+    const w = pick(14, 34);
+    const dist = Math.abs(x + w / 2 - centre) / 100; // 0 centre .. ~1 edge
+    const h = (base - 20) * (1 - dist * 0.85) * pick(0.82, 1);
+    slabs.push({ x, y: base - h, w, h });
+    x += w;
+  }
+  // Draw outer (shorter) slabs first so the taller centre overlaps them
+  slabs.sort((a, b) => a.h - b.h).forEach((b) => blocks.push(b));
+  // Recessed panels and protruding cubes on the faces
+  for (const b of slabs) {
+    if (b.h > 140 && rand() > 0.3) {
+      const ph = pick(30, 80);
+      blocks.push({ x: b.x + 3, y: b.y + pick(10, b.h - ph - 10), w: b.w - 6, h: ph });
+    }
+    if (rand() > 0.55) {
+      const cw = pick(8, 18);
+      blocks.push({ x: b.x + pick(-4, b.w - cw + 4), y: b.y + pick(20, Math.max(21, b.h - 40)), w: cw, h: cw });
+    }
+  }
+} else {
+  W = 1200;
+  H = 160;
+  let x = 0;
+  while (x < W) {
+    const w = pick(30, 110);
+    const h = pick(20, rand() > 0.85 ? 150 : 70);
+    blocks.push({ x, y: H - h, w, h });
+    if (rand() > 0.6) {
+      const cw = pick(10, 24);
+      blocks.push({ x: x + pick(0, w - cw), y: H - h - cw + 2, w: cw, h: cw });
+    }
+    x += w + (rand() > 0.7 ? pick(10, 60) : 0);
+  }
+}
+---
+
+<svg
+  class:list={['monolith', kind, className]}
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio={kind === 'skyline' ? 'xMidYMax slice' : 'xMidYMax meet'}
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    blocks.map((b) => (
+      <g>
+        <polygon
+          class="side"
+          points={`${b.x + b.w},${b.y} ${b.x + b.w + D},${b.y - D / 2} ${b.x + b.w + D},${b.y + b.h - D / 2} ${b.x + b.w},${b.y + b.h}`}
+        />
+        <polygon
+          class="top"
+          points={`${b.x},${b.y} ${b.x + D},${b.y - D / 2} ${b.x + b.w + D},${b.y - D / 2} ${b.x + b.w},${b.y}`}
+        />
+        <rect class="front" x={b.x} y={b.y} width={b.w} height={b.h} />
+      </g>
+    ))
+  }
+</svg>
+
+<style>
+  .monolith {
+    display: block;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .front {
+    fill: var(--block-front);
+    stroke: var(--block-edge);
+    stroke-width: 0.5;
+  }
+
+  .side {
+    fill: var(--block-side);
+  }
+
+  .top {
+    fill: var(--block-top);
+  }
+</style>

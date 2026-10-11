@@ -12,7 +12,9 @@ const isActive = (href: string) =>
 -->
 <header class="nav">
   <div class="top">
-    <a href="/" class="wordmark" aria-label={`${site.name}, home`}>{site.name}</a>
+    <a href="/" class="wordmark" aria-label={`${site.name}, home`}>
+      <span class="glyph" aria-hidden="true"><i></i><i></i><i></i></span>{site.name}
+    </a>
     <p class="tagline">{site.tagline}</p>
   </div>
 
@@ -61,10 +63,29 @@ const isActive = (href: string) =>
   }
 
   .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     font-weight: 600;
     font-size: var(--text-sm);
     letter-spacing: -0.01em;
     text-decoration: none;
+  }
+
+  /* Three stacked blocks: a tiny monolith as the mark. */
+  .glyph {
+    display: grid;
+    grid-template-columns: repeat(2, 5px);
+    grid-template-rows: repeat(2, 5px);
+    gap: 1px;
+  }
+
+  .glyph i {
+    background: currentColor;
+  }
+
+  .glyph i:first-child {
+    grid-row: 1 / span 2;
   }
 
   .tagline,
@@ -95,13 +116,30 @@ const isActive = (href: string) =>
     color: var(--fg);
   }
 
+  /* NieR-style cursor: a small square that slides in beside the current item. */
+  .links a::before {
+    content: '';
+    position: absolute;
+    left: -0.8rem;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    margin-top: -2.5px;
+    background: currentColor;
+    transform: scale(0);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .links a[aria-current='page']::before {
+    transform: scale(1);
+  }
+
   .dot {
     position: absolute;
     top: 0.85rem;
-    right: -0.55rem;
+    right: -0.6rem;
     width: 5px;
     height: 5px;
-    border-radius: 50%;
     background: var(--accent);
   }
 
@@ -137,6 +175,10 @@ const isActive = (href: string) =>
 
     .dot {
       top: 0.55rem;
+    }
+
+    .links a:hover::before {
+      transform: scale(1);
     }
 
     .side-foot {

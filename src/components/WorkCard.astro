@@ -13,7 +13,7 @@ const { title, year, medium } = work.data;
 
 <li class="work-card" data-medium={medium}>
   <a href={workUrl(work)} class="work-link" data-lightbox-trigger={work.id}>
-    <div class="work-frame">
+    <div class="work-frame" data-reveal-frame>
       <WorkImage work={work} sizes="(min-width: 64rem) 55vw, 100vw" eager={eager} />
     </div>
     <p class="work-caption">
@@ -34,7 +34,19 @@ const { title, year, medium } = work.data;
   }
 
   .work-frame {
+    position: relative;
     overflow: hidden;
+  }
+
+  .work-frame :global(.tile-cover) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+  }
+
+  .work-frame :global(.tile-cover i) {
+    background: var(--bg);
+    outline: 1px solid var(--bg); /* hide hairline seams between tiles */
   }
 
   .work-frame :global(img) {

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { commission } from '../config/site';
 ---
 
-<Base title="Commission" description="Commission an illustration from gogofigo through VGen.">
+<Base title="Commission" description="Commission an illustration from gogofigo through VGen." monolith="tower" seed={4}>
   <div class="commission container">
     <h1 class="status">
       Commissions <span class:list={{ open: commission.open }}>{commission.open ? 'open' : 'closed'}</span>

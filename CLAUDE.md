@@ -33,7 +33,7 @@ src/
   components/           Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
                         GalleryFilter, Lightbox, Placeholder
   scripts/motion.ts     GSAP setup, shared easing, reduced-motion check
-  scripts/reveal.ts     clip-path "flat brush" reveal (imported by WorkGrid)
+  scripts/reveal.ts     square-tile reveal for work images (imported by WorkGrid)
   styles/tokens.css     design tokens + @font-face
   styles/global.css     reset, base type, utilities (.container .label .button .section …)
   pages/                index (all work + filter), work/[slug], info (bio, contact, events),
@@ -50,6 +50,10 @@ Figo's feedback (2026-10-11): the first version felt like a company profile. Kee
 no section headings, no CTA blocks, no uppercase label clutter. Captions are tiny (title + year).
 Navigation: on desktop a fixed left column (wordmark, tagline, Work/Info/Commission, socials at the bottom),
 no bar, blur or border. On phones a plain text line at the top that scrolls away.
+NieR-style accents (Figo, 2026-10-11): cool off-white palette, square corners everywhere, a small
+square as the only UI marker (current nav item, active filter, commission status), white block
+"monolith" SVG decorations (components/Monolith.astro: tower on Info/Commission/404 desktop,
+skyline on phones and at the end of Home), and images revealed by a grid of shrinking squares.
 Home *is* the work: an editorial grid where works drift between columns with lots of air.
 
 - **Color (light / dark):** `--bg` #f7f7f4 / #0c0c0d (never pure white/black), `--fg` #111113 / #ededeb, grays `--gray-1…6`, `--hairline` for 1px UI lines.
@@ -62,7 +66,7 @@ Home *is* the work: an editorial grid where works drift between columns with lot
 ## Animation rules
 
 - Motion serves the art: subtle, fast, calm. Art never waits for an animation.
-- Animate only `transform`, `opacity`, `clip-path`. Never animate `filter: blur` on images.
+- Animate only `transform`, `opacity`, `clip-path`. The tile reveal scales background-coloured squares to 0. Never animate `filter: blur` on images.
 - Easing: `--ease-out` cubic-bezier(0.22, 1, 0.36, 1) / GSAP `expo.out` or `power3.out`. No bounce or elastic.
 - GSAP is imported only by `WorkGrid` (reveal). Pages without a grid ship no GSAP.
 - Images already in the viewport on load, and any `eager` image, are never hidden for a reveal.

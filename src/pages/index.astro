@@ -10,7 +10,7 @@ const works = await getWorks();
 const cover = works[0];
 ---
 
-<Base image={cover?.data.image} imageAlt={cover?.data.alt}>
+<Base image={cover?.data.image} imageAlt={cover?.data.alt} monolith="skyline">
   <h1 class="visually-hidden">{site.name}: {site.tagline}</h1>
   <div class="bar container">
     <p class="tagline">{site.tagline}</p>
