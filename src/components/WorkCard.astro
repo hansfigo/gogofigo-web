@@ -4,29 +4,22 @@ import { workUrl, type Work } from '../lib/works';
 
 interface Props {
   work: Work;
-  index: number;
-  sizes?: string;
   eager?: boolean;
 }
 
-const {
-  work,
-  index,
-  sizes = '(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 100vw',
-  eager = false,
-} = Astro.props;
+const { work, eager = false } = Astro.props;
 const { title, year, medium } = work.data;
 ---
 
-<li class="work-card" data-medium={medium} data-index={index}>
+<li class="work-card" data-medium={medium}>
   <a href={workUrl(work)} class="work-link" data-lightbox-trigger={work.id}>
     <div class="work-frame">
-      <WorkImage work={work} sizes={sizes} eager={eager} class="work-img" />
+      <WorkImage work={work} sizes="(min-width: 64rem) 55vw, 100vw" eager={eager} />
     </div>
-    <div class="work-caption">
-      <span class="work-title">{title}</span>
-      <span class="label">{year}</span>
-    </div>
+    <p class="work-caption">
+      <span>{title}</span>
+      <span class="year">{year}</span>
+    </p>
   </a>
 </li>
 
@@ -42,47 +35,44 @@ const { title, year, medium } = work.data;
 
   .work-frame {
     overflow: hidden;
-    background: var(--gray-1);
   }
 
   .work-frame :global(img) {
     width: 100%;
     height: auto;
-    transition: transform var(--dur-slow) var(--ease-out);
+    transition: transform 1.2s var(--ease-out);
   }
 
   .work-caption {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
     gap: var(--space-3);
     padding-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--gray-5);
+    overflow: hidden;
   }
 
-  .work-title {
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+  .year {
+    font-family: var(--font-mono);
   }
 
-  /* Desktop only: tiny zoom, caption rises from below. */
   @media (hover: hover) and (pointer: fine) {
-    .work-caption {
-      opacity: 0;
-      transform: translateY(0.5rem);
-      transition:
-        opacity var(--dur-base) var(--ease-out),
-        transform var(--dur-base) var(--ease-out);
+    .work-caption > span {
+      transform: translateY(110%);
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+
+    .work-caption .year {
+      transition-delay: 40ms;
     }
 
     .work-link:hover .work-frame :global(img),
     .work-link:focus-visible .work-frame :global(img) {
-      transform: scale(1.015);
+      transform: scale(1.02);
     }
 
-    .work-link:hover .work-caption,
-    .work-link:focus-visible .work-caption {
-      opacity: 1;
+    .work-link:hover .work-caption > span,
+    .work-link:focus-visible .work-caption > span {
       transform: none;
     }
   }

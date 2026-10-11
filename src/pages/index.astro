@@ -1,207 +1,46 @@
 ---
 import Base from '../layouts/Base.astro';
-import WorkImage from '../components/WorkImage.astro';
+import GalleryFilter from '../components/GalleryFilter.astro';
 import WorkGrid from '../components/WorkGrid.astro';
 import Lightbox from '../components/Lightbox.astro';
-import SlotStatus from '../components/SlotStatus.astro';
-import { site, commission } from '../config/site';
-import { getFeaturedWorks, workUrl } from '../lib/works';
-import { getEvents, formatEventDate } from '../lib/events';
+import { site } from '../config/site';
+import { getWorks } from '../lib/works';
 
-const featured = await getFeaturedWorks(6);
-const [hero, ...rest] = featured;
-const { upcoming } = await getEvents();
-const nextEvent = upcoming[0];
+const works = await getWorks();
+const cover = works[0];
 ---
 
-<Base image={hero?.data.image} imageAlt={hero?.data.alt}>
-  <section class="hero container">
-    <div class="hero-text">
-      <h1 class="hero-title" data-hero-title>{site.name}</h1>
-      <p class="hero-tagline" data-hero-line>{site.tagline}</p>
-      <p class="label hero-meta">Illustration · Acrylic on canvas</p>
-    </div>
-    {
-      hero && (
-        <a href={workUrl(hero)} class="hero-work" data-hero-work>
-          <WorkImage work={hero} sizes="(min-width: 64rem) 50vw, 100vw" widths={[480, 800, 1200, 1600]} eager />
-          <span class="hero-caption">
-            <span>{hero.data.title}</span>
-            <span class="label">{hero.data.year}</span>
-          </span>
-        </a>
-      )
-    }
+<Base image={cover?.data.image} imageAlt={cover?.data.alt}>
+  <h1 class="visually-hidden">{site.name}: {site.tagline}</h1>
+  <div class="bar container">
+    <p class="tagline">{site.tagline}</p>
+    <GalleryFilter />
+  </div>
+  <section class="container" aria-label="Works">
+    <WorkGrid works={works} eagerCount={1} />
   </section>
-
-  {
-    nextEvent && (
-      <section class="container">
-        <a href="/events" class="event-strip">
-          <span class="label">Next: {nextEvent.data.title}</span>
-          <span class="event-strip-meta">
-            {formatEventDate(nextEvent)} · {nextEvent.data.location}
-          </span>
-        </a>
-      </section>
-    )
-  }
-
-  <section class="section container" aria-labelledby="selected">
-    <div class="section-head">
-      <h2 class="section-title" id="selected">Selected works</h2>
-      <a href="/gallery" class="label more-link">All works →</a>
-    </div>
-    <WorkGrid works={rest} />
-  </section>
-
-  <section class="section container cta">
-    <div class="cta-block">
-      <p class="label">Gallery</p>
-      <h2 class="section-title">See everything, digital and on canvas.</h2>
-      <a href="/gallery" class="button button-secondary">Open the gallery</a>
-    </div>
-    <div class="cta-block">
-      <SlotStatus />
-      <h2 class="section-title">Want a piece of your own?</h2>
-      <p class="muted">{commission.note}</p>
-      <a href="/commission" class="button">Commission info</a>
-    </div>
-  </section>
-
-  <Lightbox works={rest} />
+  <Lightbox works={works} />
 </Base>
 
-<script>
-  import '../scripts/hero';
-</script>
-
 <style>
-  .hero {
-    display: grid;
-    gap: var(--space-8);
-    padding-top: calc(var(--nav-height) + var(--space-9));
-  }
-
-  .hero-title {
-    font-size: var(--text-display);
-    font-weight: 700;
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
-  }
-
-  .hero-tagline {
-    margin-top: var(--space-5);
-    max-width: 26rem;
-    font-size: var(--text-lg);
-    color: var(--gray-5);
-  }
-
-  .hero-meta {
-    margin-top: var(--space-6);
-  }
-
-  .hero-work {
-    display: block;
-    text-decoration: none;
-  }
-
-  /*
-   * Hero motion. Title and tagline wait (hidden) for GSAP, with a CSS failsafe in case
-   * scripts never run. The hero work fades in with pure CSS so it never waits on JS.
-   */
-  @media (prefers-reduced-motion: no-preference) {
-    .hero-title:not(.is-ready),
-    .hero-tagline:not(.is-ready) {
-      opacity: 0;
-      animation: hero-failsafe 0.4s ease-out 2s forwards;
-    }
-
-    .hero-work {
-      animation: hero-work-in 0.9s var(--ease-out) 0.25s backwards;
-    }
-  }
-
-  @keyframes hero-failsafe {
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes hero-work-in {
-    from {
-      opacity: 0;
-    }
-  }
-
-  .hero-work :global(img) {
-    width: 100%;
-    max-height: 80dvh;
-    object-fit: contain;
-    object-position: left top;
-  }
-
-  .hero-caption {
+  .bar {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    gap: var(--space-3);
-    padding-top: var(--space-3);
-    font-size: var(--text-sm);
-  }
-
-  .event-strip {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-1) var(--space-4);
-    margin-top: var(--space-8);
-    padding-block: var(--space-4);
-    border-block: 1px solid var(--hairline);
-    text-decoration: none;
-  }
-
-  .event-strip .label {
-    color: var(--accent);
-  }
-
-  .event-strip-meta {
-    font-size: var(--text-sm);
-    color: var(--gray-5);
-  }
-
-  .cta {
-    display: grid;
-    gap: var(--space-8);
-  }
-
-  .cta-block {
-    display: grid;
-    justify-items: start;
-    align-content: start;
     gap: var(--space-4);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--hairline);
+    padding-top: calc(var(--nav-height) + var(--space-8));
+    padding-bottom: var(--space-6);
   }
 
-  .cta-block .button {
-    margin-top: var(--space-2);
+  .tagline {
+    font-size: var(--text-xs);
+    color: var(--gray-5);
   }
 
-  @media (min-width: 64rem) {
-    .hero {
-      grid-template-columns: 1fr 1fr;
-      align-items: end;
-      gap: var(--space-9);
-      padding-top: calc(var(--nav-height) + var(--space-8));
-    }
-
-    .hero-text {
-      padding-bottom: var(--space-9);
-    }
-
-    .cta {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-9);
+  @media (min-width: 48rem) {
+    .bar {
+      padding-top: calc(var(--nav-height) + var(--space-9));
+      padding-bottom: var(--space-8);
     }
   }
 </style>

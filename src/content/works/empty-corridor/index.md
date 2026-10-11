@@ -7,7 +7,6 @@ size: 50×50 cm
 featured: true
 order: 4
 placeholder: true
-description: "Placeholder description. An empty hallway that feels slightly too long."
 alt: "Placeholder: square abstract composition in dark teal."
 image: ./image.jpg
 ---

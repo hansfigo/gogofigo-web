@@ -1,115 +1,72 @@
 ---
 import Base from '../layouts/Base.astro';
-import SlotStatus from '../components/SlotStatus.astro';
 import { commission } from '../config/site';
 ---
 
-<Base title="Commission" description="Commission an illustration from gogofigo. Current slot status, pricing and how ordering works on VGen.">
-  <section class="page-header container">
-    <SlotStatus />
-    <h1 class="page-title">Commissions</h1>
-    <p class="page-lede">{commission.note} All requests and payments go through VGen.</p>
-    <div class="actions">
-      <a href={commission.vgenUrl} class="button" target="_blank" rel="noopener">
-        {commission.open ? 'Request on VGen' : 'View on VGen'} <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-  </section>
+<Base title="Commission" description="Commission an illustration from gogofigo through VGen.">
+  <div class="commission container">
+    <h1 class="status">
+      Commissions <span class:list={{ open: commission.open }}>{commission.open ? 'open' : 'closed'}</span>
+    </h1>
 
-  <section class="container" aria-labelledby="pricing">
-    <div class="section-head">
-      <h2 class="section-title" id="pricing">Types &amp; pricing</h2>
-      <span class="label">Starting prices</span>
-    </div>
     <ul class="tiers">
       {
-        commission.tiers.map((tier) => (
-          <li class="tier">
-            <div>
-              <h3 class="tier-name">{tier.name}</h3>
-              <p class="muted">{tier.description}</p>
-            </div>
-            <p class="tier-price">{tier.priceFrom}</p>
+        commission.tiers.map((t) => (
+          <li>
+            <span>{t.name}</span>
+            <span class="price">{t.priceFrom}</span>
           </li>
         ))
       }
     </ul>
-  </section>
 
-  <section class="section container" aria-labelledby="how">
-    <div class="section-head">
-      <h2 class="section-title" id="how">How it works</h2>
-    </div>
-    <ol class="steps">
-      {
-        commission.steps.map((step, i) => (
-          <li>
-            <span class="label step-no">{String(i + 1).padStart(2, '0')}</span>
-            <p>{step}</p>
-          </li>
-        ))
-      }
-    </ol>
-    <div class="actions">
-      <a href={commission.vgenUrl} class="button" target="_blank" rel="noopener">
-        Go to VGen <span aria-hidden="true">↗</span>
-      </a>
-      <a href="/gallery" class="button button-secondary">See examples</a>
-    </div>
-  </section>
+    <a href={commission.vgenUrl} class="button" target="_blank" rel="noopener">
+      {commission.open ? 'Request on VGen' : 'VGen'} <span aria-hidden="true">↗</span>
+    </a>
+  </div>
 </Base>
 
 <style>
-  .page-header .page-title {
-    margin-top: var(--space-4);
+  .commission {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-8);
+    padding-top: calc(var(--nav-height) + var(--space-9));
   }
 
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
+  .status {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-snug);
   }
 
-  .tiers,
-  .steps {
+  .status span {
+    color: var(--gray-5);
+  }
+
+  .status .open {
+    color: var(--accent);
+  }
+
+  .tiers {
+    display: grid;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 22rem;
     list-style: none;
     padding: 0;
+    font-size: var(--text-sm);
   }
 
-  .tier {
+  .tiers li {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-5);
-    padding-block: var(--space-5);
-    border-bottom: 1px solid var(--hairline);
+    gap: var(--space-4);
   }
 
-  .tier:first-child {
-    padding-top: 0;
-  }
-
-  .tier-name {
-    font-size: var(--text-lg);
-    font-weight: 600;
-  }
-
-  .tier-price {
+  .price {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-  }
-
-  .steps {
-    display: grid;
-    gap: var(--space-5);
-    max-width: var(--measure);
-  }
-
-  .steps li {
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    align-items: baseline;
+    font-size: var(--text-xs);
+    color: var(--gray-5);
   }
 </style>

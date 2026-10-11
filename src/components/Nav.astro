@@ -1,52 +1,26 @@
 ---
-import { nav, site } from '../config/site';
+import { nav, site, commission } from '../config/site';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+const isActive = (href: string) =>
+  href === '/' ? path === '/' || path.startsWith('/work') : path === href || path.startsWith(`${href}/`);
 ---
 
-<header class="nav" data-nav>
+<header class="nav">
   <div class="nav-inner container">
     <a href="/" class="wordmark" aria-label={`${site.name}, home`}>{site.name}</a>
-
     <nav aria-label="Main">
-      <ul class="nav-links">
+      <ul>
         {
           nav.map((item) => (
             <li>
               <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
                 {item.label}
+                {item.href === '/commission' && commission.open && <span class="dot" aria-label="(open)" />}
               </a>
             </li>
           ))
         }
-      </ul>
-    </nav>
-
-    <button
-      class="menu-toggle"
-      type="button"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      data-menu-toggle
-    >
-      <span class="menu-toggle-label">Menu</span>
-    </button>
-  </div>
-
-  <div class="mobile-menu" id="mobile-menu" hidden data-menu>
-    <nav aria-label="Mobile">
-      <ul class="container">
-        {
-          nav.map((item) => (
-            <li>
-              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-        <li><a href="/links" aria-current={isActive('/links') ? 'page' : undefined}>Links</a></li>
       </ul>
     </nav>
   </div>
@@ -60,7 +34,6 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     background: var(--bg-translucent);
     -webkit-backdrop-filter: saturate(180%) blur(16px);
     backdrop-filter: saturate(180%) blur(16px);
-    border-bottom: 1px solid var(--hairline);
   }
 
   .nav-inner {
@@ -68,121 +41,46 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
   .wordmark {
-    font-weight: 650;
-    font-size: var(--text-base);
-    letter-spacing: var(--tracking-snug);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: -0.01em;
     text-decoration: none;
   }
 
-  .nav-links {
-    display: none;
+  ul {
+    display: flex;
+    gap: var(--space-5);
     list-style: none;
     padding: 0;
-    gap: var(--space-6);
   }
 
-  .nav-links a,
-  .mobile-menu a {
-    text-decoration: none;
+  a:not(.wordmark) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-sm);
     color: var(--gray-5);
+    text-decoration: none;
     transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .nav-links a {
-    font-size: var(--text-sm);
-  }
-
-  .nav-links a:hover,
-  .mobile-menu a:hover {
+  a:not(.wordmark):hover,
+  a[aria-current='page'] {
     color: var(--fg);
   }
 
-  .nav-links a[aria-current='page'],
-  .mobile-menu a[aria-current='page'] {
-    color: var(--accent);
-  }
-
-  .menu-toggle {
-    min-height: 44px;
-    padding-inline: var(--space-2);
-    margin-right: calc(var(--space-2) * -1);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--fg);
-  }
-
-  .menu-toggle[aria-expanded='true'] .menu-toggle-label::after {
-    content: ' ×';
-  }
-
-  .mobile-menu {
-    height: calc(100dvh - var(--nav-height));
-    overflow-y: auto;
-    background: var(--bg);
-    border-top: 1px solid var(--hairline);
-  }
-
-  .mobile-menu ul {
-    list-style: none;
-    padding-block: var(--space-3) var(--space-6);
-  }
-
-  .mobile-menu li + li {
-    border-top: 1px solid var(--hairline);
-  }
-
-  .mobile-menu a {
-    display: block;
-    padding-block: var(--space-4);
-    font-size: var(--text-xl);
-    font-weight: 600;
-    letter-spacing: var(--tracking-snug);
-    color: var(--fg);
-  }
-
-  @media (min-width: 48rem) {
-    .nav-links {
-      display: flex;
-    }
-
-    .menu-toggle,
-    .mobile-menu {
-      display: none;
-    }
+  .dot {
+    position: absolute;
+    top: 0.85rem;
+    right: -0.55rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
   }
 </style>
-
-<script>
-  // Module scripts run once, even with the client router, so delegate from document.
-  const getParts = () => ({
-    toggle: document.querySelector<HTMLButtonElement>('[data-menu-toggle]'),
-    menu: document.querySelector<HTMLElement>('[data-menu]'),
-  });
-
-  const setOpen = (open: boolean) => {
-    const { toggle, menu } = getParts();
-    if (!toggle || !menu) return;
-    toggle.setAttribute('aria-expanded', String(open));
-    menu.hidden = !open;
-  };
-
-  document.addEventListener('click', (e) => {
-    if ((e.target as Element).closest('[data-menu-toggle]')) {
-      setOpen(Boolean(getParts().menu?.hidden));
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    const { toggle, menu } = getParts();
-    if (e.key === 'Escape' && menu && !menu.hidden) {
-      setOpen(false);
-      toggle?.focus();
-    }
-  });
-</script>

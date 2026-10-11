@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import SlotStatus from '../components/SlotStatus.astro';
 import { site, socials, commission } from '../config/site';
 import { getEvents, formatEventDate } from '../lib/events';
 
@@ -8,15 +7,15 @@ const { upcoming } = await getEvents();
 const nextEvent = upcoming[0];
 
 const links = [
-  { label: 'Gallery', detail: 'All works', href: '/gallery', external: false },
+  { label: 'Work', detail: '', href: '/', external: false },
   {
     label: 'Commission',
-    detail: commission.open ? 'Open now' : 'Closed',
+    detail: commission.open ? 'Open' : 'Closed',
     href: '/commission',
     external: false,
   },
   ...(nextEvent
-    ? [{ label: nextEvent.data.title, detail: formatEventDate(nextEvent), href: '/events', external: false }]
+    ? [{ label: nextEvent.data.title, detail: formatEventDate(nextEvent), href: '/info#events', external: false }]
     : []),
   ...socials.map((s) => ({ label: s.label, detail: s.handle, href: s.href, external: true })),
   { label: 'Email', detail: site.email, href: `mailto:${site.email}`, external: false },
@@ -26,8 +25,6 @@ const links = [
 <Base title="Links" description="All gogofigo links in one place: gallery, commissions, events and socials.">
   <section class="links container">
     <h1 class="links-name">{site.name}</h1>
-    <p class="muted">{site.tagline}</p>
-    <SlotStatus />
 
     <ul class="link-list">
       {
@@ -35,7 +32,7 @@ const links = [
           <li>
             <a href={l.href} {...(l.external ? { target: '_blank', rel: 'me noopener' } : {})}>
               <span class="link-label">{l.label}</span>
-              <span class="label link-detail">
+              <span class="link-detail">
                 {l.detail}
                 {l.external && <span aria-hidden="true"> ↗</span>}
               </span>
@@ -57,10 +54,9 @@ const links = [
   }
 
   .links-name {
-    font-size: var(--text-2xl);
-    font-weight: 700;
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-snug);
   }
 
   .link-list {
@@ -68,7 +64,6 @@ const links = [
     margin-top: var(--space-6);
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--hairline);
   }
 
   .link-list a {
@@ -76,16 +71,14 @@ const links = [
     align-items: baseline;
     justify-content: space-between;
     gap: var(--space-4);
-    min-height: 56px;
-    padding-block: var(--space-4);
-    border-bottom: 1px solid var(--hairline);
+    min-height: 48px;
+    padding-block: var(--space-3);
     text-decoration: none;
   }
 
   .link-label {
-    font-size: var(--text-lg);
-    font-weight: 550;
-    letter-spacing: var(--tracking-snug);
+    font-size: var(--text-base);
+    font-weight: 500;
   }
 
   .link-list a:hover .link-label {
@@ -93,6 +86,8 @@ const links = [
   }
 
   .link-detail {
+    font-size: var(--text-xs);
+    color: var(--gray-5);
     text-align: right;
     overflow-wrap: anywhere;
   }

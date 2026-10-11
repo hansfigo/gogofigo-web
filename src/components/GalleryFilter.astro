@@ -9,7 +9,7 @@ const options = [
 <div class="filter" role="group" aria-label="Filter by medium" data-filter>
   {
     options.map((o, i) => (
-      <button type="button" class="filter-btn" data-filter-value={o.value} aria-pressed={i === 0 ? 'true' : 'false'}>
+      <button type="button" data-filter-value={o.value} aria-pressed={i === 0 ? 'true' : 'false'}>
         {o.label}
       </button>
     ))
@@ -18,30 +18,45 @@ const options = [
 
 <style>
   .filter {
-    display: inline-flex;
-    gap: var(--space-1);
-    padding: 3px;
-    border: 1px solid var(--hairline);
-    border-radius: 999px;
+    display: flex;
+    gap: var(--space-4);
   }
 
-  .filter-btn {
-    min-height: 36px;
-    padding-inline: var(--space-4);
-    border-radius: 999px;
-    font-size: var(--text-sm);
+  button {
+    min-height: 44px;
+    font-size: var(--text-xs);
     color: var(--gray-5);
-    transition:
-      color var(--dur-fast) var(--ease-out),
-      background-color var(--dur-fast) var(--ease-out);
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .filter-btn:hover {
+  button:hover,
+  button[aria-pressed='true'] {
     color: var(--fg);
   }
 
-  .filter-btn[aria-pressed='true'] {
-    background: var(--fg);
-    color: var(--bg);
+  button[aria-pressed='true'] {
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
   }
 </style>
+
+<script>
+  function initFilter() {
+    const filter = document.querySelector<HTMLElement>('[data-filter]');
+    if (!filter || filter.dataset.bound) return;
+    filter.dataset.bound = 'true';
+
+    const buttons = [...filter.querySelectorAll<HTMLButtonElement>('[data-filter-value]')];
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-work-grid] > [data-medium]')];
+
+    filter.addEventListener('click', (e) => {
+      const button = (e.target as Element).closest<HTMLButtonElement>('[data-filter-value]');
+      if (!button) return;
+      const value = button.dataset.filterValue!;
+      for (const card of cards) card.hidden = value !== 'all' && card.dataset.medium !== value;
+      for (const b of buttons) b.setAttribute('aria-pressed', String(b === button));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initFilter);
+</script>

@@ -30,21 +30,25 @@ src/
   lib/works.ts          getWorks(), getFeaturedWorks(), workUrl(), mediumLabel
   lib/events.ts         getEvents() → { upcoming, past }, formatEventDate()
   layouts/Base.astro    <head>, SEO, nav, footer, client router, page transition
-  components/           Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid, WorkMeta,
-                        GalleryFilter, Lightbox, SlotStatus, Placeholder
+  components/           Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
+                        GalleryFilter, Lightbox, Placeholder
   scripts/motion.ts     GSAP setup, shared easing, reduced-motion check
   scripts/reveal.ts     clip-path "flat brush" reveal (imported by WorkGrid)
-  scripts/hero.ts       hero title/tagline stagger (imported by pages/index.astro)
   styles/tokens.css     design tokens + @font-face
   styles/global.css     reset, base type, utilities (.container .label .button .section …)
-  pages/                index, gallery, work/[slug], about, commission, events, links, 404
+  pages/                index (all work + filter), work/[slug], info (bio, contact, events),
+                        commission, links (link-in-bio), 404
+                        /gallery, /about, /events redirect (astro.config.ts + public/_redirects)
 scripts/make-placeholders.mjs   regenerates the sample placeholder images
 public/_headers         Cloudflare caching headers
 ```
 
 ## Design tokens (src/styles/tokens.css)
 
-Concept: "white box". Quiet off-white room, art is the only focus. References: Apple product pages, Vercel Geist.
+Concept: "white box" artist portfolio. Quiet off-white room, art is the only focus, almost no text.
+Figo's feedback (2026-10-11): the first version felt like a company profile. Keep copy to a minimum:
+no section headings, no CTA blocks, no uppercase label clutter. Captions are tiny (title + year).
+Home *is* the work: an editorial grid where works drift between columns with lots of air.
 
 - **Color (light / dark):** `--bg` #f7f7f4 / #0c0c0d (never pure white/black), `--fg` #111113 / #ededeb, grays `--gray-1…6`, `--hairline` for 1px UI lines.
 - **Accent:** `--accent` indigo (#2f4fb3 light, #7fa2ff dark). Use sparingly: active nav link, "commissions open", small details. Never for large areas.
@@ -58,8 +62,8 @@ Concept: "white box". Quiet off-white room, art is the only focus. References: A
 - Motion serves the art: subtle, fast, calm. Art never waits for an animation.
 - Animate only `transform`, `opacity`, `clip-path`. Never animate `filter: blur` on images.
 - Easing: `--ease-out` cubic-bezier(0.22, 1, 0.36, 1) / GSAP `expo.out` or `power3.out`. No bounce or elastic.
-- GSAP is imported only by `WorkGrid` (reveal) and the home page (hero). Pages without them ship no GSAP.
-- Images already in the viewport on load, and any `eager` image (hero, work page), are never hidden for a reveal.
+- GSAP is imported only by `WorkGrid` (reveal). Pages without a grid ship no GSAP.
+- Images already in the viewport on load, and any `eager` image, are never hidden for a reveal.
 - Gallery hover (zoom 1.015 + caption rising) is CSS, only under `(hover: hover) and (pointer: fine)`.
 - `prefers-reduced-motion: reduce` disables everything: scripts bail early, CSS transitions and view transitions are off.
 - Client router note: module scripts run once. Re-initialize per page on `astro:page-load`; register document-level listeners once. ScrollTriggers are killed on `astro:before-swap`.
@@ -77,15 +81,15 @@ slug: quiet-room
 year: 2025
 medium: digital        # digital | acrylic
 size: 40×60 cm         # optional, canvases only
-featured: true         # shows on the home page (first featured = hero)
+featured: true         # reserved for highlighting; home shows every work
 order: 1               # optional; lower comes first
-description: Optional one or two sentences.
+description: Optional, one short line.
 alt: Required. Describe what is in the picture for screen readers.
 image: ./image.jpg
 ---
 ```
 
-Remove `placeholder: true` from real works (it shows the "Placeholder" tag). Delete the sample folders once real work is in.
+Keep `description` short or leave it out. Remove `placeholder: true` from real works (it shows the "Placeholder" tag). Delete the sample folders once real work is in.
 
 ## Adding an event
 
@@ -107,7 +111,7 @@ Upcoming vs past is decided **at build time**. Redeploy after an event ends (or 
 
 ## Placeholders still to fill (search for `TODO`)
 
-Instagram / X / VGen handles, email, domain (`site.url` and `public/robots.txt`), commission prices, CF23 details, about-page bio and process text, Cloudflare Web Analytics token.
+Instagram / X / VGen handles, email, domain (`site.url` and `public/robots.txt`), commission prices, CF23 details, `bio` lines in site.ts, Cloudflare Web Analytics token.
 
 ## Quality bar
 
