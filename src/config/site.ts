@@ -15,7 +15,7 @@ export type CommissionTier = {
 // Short bio for the Info page. Keep it this short.
 export const bio = [
   'Hi, I’m Figo. I like to draw.',
-  'Quiet rooms, fragile moments, and a lot of blue.',
+  'I draw digitally in Clip Studio Paint and Procreate, and paint with acrylic on canvas.',
 ];
 
 export const site = {
