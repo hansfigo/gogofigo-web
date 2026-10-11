@@ -1,0 +1,95 @@
+---
+import WorkImage from './WorkImage.astro';
+import { workUrl, type Work } from '../lib/works';
+
+interface Props {
+  work: Work;
+  index: number;
+  sizes?: string;
+  eager?: boolean;
+}
+
+const {
+  work,
+  index,
+  sizes = '(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 100vw',
+  eager = false,
+} = Astro.props;
+const { title, year, medium } = work.data;
+---
+
+<li class="work-card" data-medium={medium} data-index={index}>
+  <a href={workUrl(work)} class="work-link" data-lightbox-trigger={work.id}>
+    <div class="work-frame">
+      <WorkImage work={work} sizes={sizes} eager={eager} class="work-img" />
+    </div>
+    <div class="work-caption">
+      <span class="work-title">{title}</span>
+      <span class="label">{year}</span>
+    </div>
+  </a>
+</li>
+
+<style>
+  .work-card {
+    list-style: none;
+  }
+
+  .work-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .work-frame {
+    overflow: hidden;
+    background: var(--gray-1);
+  }
+
+  .work-frame :global(img) {
+    width: 100%;
+    height: auto;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .work-caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+  }
+
+  .work-title {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Desktop only: tiny zoom, caption rises from below. */
+  @media (hover: hover) and (pointer: fine) {
+    .work-caption {
+      opacity: 0;
+      transform: translateY(0.5rem);
+      transition:
+        opacity var(--dur-base) var(--ease-out),
+        transform var(--dur-base) var(--ease-out);
+    }
+
+    .work-link:hover .work-frame :global(img),
+    .work-link:focus-visible .work-frame :global(img) {
+      transform: scale(1.015);
+    }
+
+    .work-link:hover .work-caption,
+    .work-link:focus-visible .work-caption {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-link:hover .work-frame :global(img) {
+      transform: none;
+    }
+  }
+</style>

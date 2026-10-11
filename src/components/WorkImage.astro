@@ -1,0 +1,30 @@
+---
+import { Picture } from 'astro:assets';
+import type { Work } from '../lib/works';
+
+interface Props {
+  work: Work;
+  sizes: string;
+  widths?: number[];
+  eager?: boolean;
+  class?: string;
+}
+
+const { work, sizes, widths = [480, 800, 1200, 1600], eager = false, class: className } = Astro.props;
+const { image, alt } = work.data;
+const usable = widths.filter((w) => w <= image.width);
+---
+
+<Picture
+  src={image}
+  alt={alt}
+  widths={usable.length ? usable : [image.width]}
+  sizes={sizes}
+  formats={['avif', 'webp']}
+  quality={78}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'sync' : 'async'}
+  fetchpriority={eager ? 'high' : 'auto'}
+  class={className}
+  data-reveal
+/>

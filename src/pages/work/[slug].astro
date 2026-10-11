@@ -1,0 +1,156 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import WorkImage from '../../components/WorkImage.astro';
+import WorkMeta from '../../components/WorkMeta.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { getWorks, workUrl, type Work } from '../../lib/works';
+
+export const getStaticPaths = (async () => {
+  const works = await getWorks();
+  return works.map((work, i) => ({
+    params: { slug: work.id },
+    props: {
+      work,
+      prev: works[(i - 1 + works.length) % works.length]!,
+      next: works[(i + 1) % works.length]!,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  work: Work;
+  prev: Work;
+  next: Work;
+}
+
+const { work, prev, next } = Astro.props;
+const { title, description, image, alt, placeholder } = work.data;
+const { Content } = await render(work);
+---
+
+<Base title={title} description={description ?? `${title} by gogofigo.`} image={image} imageAlt={alt} type="article">
+  <article class="work container">
+    <figure class="work-figure">
+      <WorkImage work={work} sizes="(min-width: 64rem) 62vw, 100vw" widths={[480, 800, 1200, 1600, 2000]} eager />
+    </figure>
+
+    <div class="work-info">
+      <p class="label"><a href="/gallery" class="back">← Gallery</a></p>
+      <h1 class="work-title">{title}</h1>
+      <WorkMeta work={work} />
+      {placeholder && <Placeholder />}
+      {description && <p class="work-desc">{description}</p>}
+      <div class="work-body"><Content /></div>
+    </div>
+  </article>
+
+  <nav class="work-pager container" aria-label="More works">
+    <a href={workUrl(prev)} class="pager-link">
+      <span class="label">Previous</span>
+      <span class="pager-title">{prev.data.title}</span>
+    </a>
+    <a href={workUrl(next)} class="pager-link pager-next">
+      <span class="label">Next</span>
+      <span class="pager-title">{next.data.title}</span>
+    </a>
+  </nav>
+</Base>
+
+<style>
+  .work {
+    display: grid;
+    gap: var(--space-6);
+    padding-top: calc(var(--nav-height) + var(--space-5));
+  }
+
+  .work-figure {
+    display: grid;
+    place-items: center;
+  }
+
+  .work-figure :global(img) {
+    max-height: calc(100dvh - var(--nav-height) - var(--space-8));
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .work-info {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-3);
+    max-width: var(--measure);
+  }
+
+  .back {
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--fg);
+  }
+
+  .work-title {
+    margin-top: var(--space-3);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .work-desc {
+    margin-top: var(--space-2);
+    color: var(--gray-5);
+  }
+
+  .work-body:empty {
+    display: none;
+  }
+
+  .work-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: var(--space-9);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .pager-link {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-5);
+    text-decoration: none;
+  }
+
+  .pager-next {
+    text-align: right;
+    justify-items: end;
+  }
+
+  .pager-title {
+    font-weight: 500;
+  }
+
+  .pager-link:hover .pager-title {
+    color: var(--accent);
+  }
+
+  @media (min-width: 64rem) {
+    .work {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: var(--space-9);
+      align-items: start;
+      padding-top: calc(var(--nav-height) + var(--space-8));
+    }
+
+    .work-figure {
+      justify-items: start;
+    }
+
+    .work-info {
+      position: sticky;
+      top: calc(var(--nav-height) + var(--space-8));
+    }
+  }
+</style>

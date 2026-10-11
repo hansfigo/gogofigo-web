@@ -1,0 +1,38 @@
+---
+import WorkCard from './WorkCard.astro';
+import type { Work } from '../lib/works';
+
+interface Props {
+  works: Work[];
+  eagerCount?: number;
+}
+
+const { works, eagerCount = 0 } = Astro.props;
+---
+
+<ul class="work-grid" data-work-grid>
+  {works.map((work, i) => <WorkCard work={work} index={i} eager={i < eagerCount} />)}
+</ul>
+
+<style>
+  .work-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8) var(--space-6);
+    align-items: start;
+    padding: 0;
+  }
+
+  @media (min-width: 40rem) {
+    .work-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .work-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-9) var(--space-7);
+    }
+  }
+</style>

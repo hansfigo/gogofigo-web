@@ -1,0 +1,47 @@
+---
+const options = [
+  { value: 'all', label: 'All' },
+  { value: 'digital', label: 'Digital' },
+  { value: 'acrylic', label: 'Acrylic' },
+] as const;
+---
+
+<div class="filter" role="group" aria-label="Filter by medium" data-filter>
+  {
+    options.map((o, i) => (
+      <button type="button" class="filter-btn" data-filter-value={o.value} aria-pressed={i === 0 ? 'true' : 'false'}>
+        {o.label}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .filter {
+    display: inline-flex;
+    gap: var(--space-1);
+    padding: 3px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+  }
+
+  .filter-btn {
+    min-height: 36px;
+    padding-inline: var(--space-4);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    color: var(--gray-5);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .filter-btn:hover {
+    color: var(--fg);
+  }
+
+  .filter-btn[aria-pressed='true'] {
+    background: var(--fg);
+    color: var(--bg);
+  }
+</style>
