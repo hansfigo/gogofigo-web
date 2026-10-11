@@ -5,6 +5,7 @@ alt: Girl holding flower
 year: 2026
 medium: acrylic
 size: 40x50cm
+order: 2
 featured: false
 placeholder: false
 ---
