@@ -18,20 +18,19 @@ npm run build
 npm run preview
 ```
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare
 
-1. Push this repo to GitHub.
-2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**, pick this repo.
-3. Build settings:
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Environment variable: `NODE_VERSION` = `22`
-4. Save and deploy. Every push to `main` redeploys; pull requests get preview URLs.
+The site deploys as a static Cloudflare Worker (config: `wrangler.jsonc`, assets only, no adapter).
+
+1. Cloudflare dashboard: **Workers & Pages → Create → Import a repository**, pick this repo.
+2. Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
+3. Every push to `main` (including Pages CMS saves) redeploys.
+
+Redirects live only in `public/_redirects`. Do not also add `redirects` to `astro.config.ts`: Cloudflare rejects duplicate rules.
 
 ### Custom domain
 
-The site runs on `hellogogofigo.com` (bought at Cloudflare Registrar). Pages project → **Custom domains** lists it. If the domain ever changes, update `url` in `src/config/site.ts` and the sitemap line in `public/robots.txt`.
+The site runs on `hellogogofigo.com` (bought at Cloudflare Registrar). Worker → **Settings → Domains & Routes** lists it. If the domain ever changes, update `url` in `src/config/site.ts` and the sitemap line in `public/robots.txt`.
 
 ### Analytics
 

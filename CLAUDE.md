@@ -1,6 +1,6 @@
 # gogofigo-web
 
-Portfolio site for **gogofigo** (Figo), illustrator and acrylic painter. Static Astro site deployed to Cloudflare Pages. Most visitors arrive from the Instagram bio, so **mobile first** in every decision.
+Portfolio site for **gogofigo** (Figo), illustrator and acrylic painter. Static Astro site deployed to Cloudflare as a static-assets Worker (`wrangler.jsonc`, no adapter). Most visitors arrive from the Instagram bio, so **mobile first** in every decision.
 
 ## Commands
 
@@ -40,7 +40,8 @@ src/
   styles/global.css     reset, base type, utilities (.container .label .button .section …)
   pages/                index (all work + filter), work/[slug], info (bio, contact, events),
                         commission, links (link-in-bio), 404
-                        /gallery, /about, /events redirect (astro.config.ts + public/_redirects)
+                        /gallery, /about, /events redirect (public/_redirects only; duplicating
+                        them in astro.config.ts breaks the Cloudflare deploy)
 scripts/make-placeholders.mjs   regenerates the sample placeholder images
 public/_headers         Cloudflare caching headers
 ```

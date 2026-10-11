@@ -1,0 +1,10 @@
+// Cloudflare Workers deploy: serve the static Astro build. No server code, no adapter.
+// public/_headers and public/_redirects are copied into dist/ and applied by Cloudflare.
+{
+  "name": "gogofigo-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
