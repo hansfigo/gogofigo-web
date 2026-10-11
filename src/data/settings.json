@@ -1,4 +1,22 @@
 {
+  "commission": {
+    "open": false,
+    "vgenUrl": "https://vgen.co/gogofigo",
+    "tiers": [
+      {
+        "name": "Bust",
+        "priceFrom": "from $XX"
+      },
+      {
+        "name": "Half body",
+        "priceFrom": "from $XX"
+      },
+      {
+        "name": "Full illustration",
+        "priceFrom": "from $XX"
+      }
+    ]
+  },
   "tagline": "Illustration & acrylic painting",
   "bio": [
     "Hi, I’m Figo. I like to draw.",
@@ -6,17 +24,20 @@
   ],
   "email": "hello@example.com",
   "socials": [
-    { "label": "Instagram", "handle": "@hellogogofigo", "href": "https://instagram.com/hellogogofigo" },
-    { "label": "X", "handle": "@hellogogofigo", "href": "https://x.com/hellogogofigo" },
-    { "label": "VGen", "handle": "gogofigo", "href": "https://vgen.co/gogofigo" }
-  ],
-  "commission": {
-    "open": true,
-    "vgenUrl": "https://vgen.co/gogofigo",
-    "tiers": [
-      { "name": "Bust", "priceFrom": "from $XX" },
-      { "name": "Half body", "priceFrom": "from $XX" },
-      { "name": "Full illustration", "priceFrom": "from $XX" }
-    ]
-  }
+    {
+      "label": "Instagram",
+      "handle": "@hellogogofigo",
+      "href": "https://instagram.com/hellogogofigo"
+    },
+    {
+      "label": "X",
+      "handle": "@hellogogofigo",
+      "href": "https://x.com/hellogogofigo"
+    },
+    {
+      "label": "VGen",
+      "handle": "gogofigo",
+      "href": "https://vgen.co/gogofigo"
+    }
+  ]
 }
