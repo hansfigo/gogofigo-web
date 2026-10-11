@@ -2,22 +2,26 @@ import { gsap, EASE, reducedMotion } from './motion';
 
 function splitInto(el: HTMLElement, unit: 'char' | 'word') {
   const text = el.textContent ?? '';
-  el.setAttribute('aria-label', text);
   const parts = unit === 'char' ? [...text] : text.split(/(\s+)/);
-  el.innerHTML = '';
+  // Screen readers get the plain text; the animated pieces are hidden from them.
+  const readable = document.createElement('span');
+  readable.className = 'visually-hidden';
+  readable.textContent = text;
+  const visual = document.createElement('span');
+  visual.setAttribute('aria-hidden', 'true');
   const pieces: HTMLElement[] = [];
   for (const part of parts) {
     if (/^\s+$/.test(part)) {
-      el.append(part);
+      visual.append(part);
       continue;
     }
     const span = document.createElement('span');
     span.textContent = part;
-    span.setAttribute('aria-hidden', 'true');
     span.style.display = 'inline-block';
-    el.append(span);
+    visual.append(span);
     pieces.push(span);
   }
+  el.replaceChildren(readable, visual);
   return pieces;
 }
 
