@@ -17,6 +17,18 @@ interface Props {
 }
 
 const props = Astro.props;
+
+// Page transition: old content fades into the background, new content rises in softly.
+const pageFade = {
+  forwards: {
+    old: { name: 'page-out', duration: '160ms', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '420ms', delay: '80ms', easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fillMode: 'both' },
+  },
+  backwards: {
+    old: { name: 'page-out', duration: '160ms', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' },
+    new: { name: 'page-in', duration: '420ms', delay: '80ms', easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fillMode: 'both' },
+  },
+};
 ---
 
 <!doctype html>
@@ -45,7 +57,7 @@ const props = Astro.props;
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav />
-    <main id="main" transition:animate="fade">
+    <main id="main" transition:animate={pageFade}>
       <slot />
     </main>
     <Footer />

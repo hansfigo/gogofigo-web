@@ -72,6 +72,10 @@ const nextEvent = upcoming[0];
   <Lightbox works={rest} />
 </Base>
 
+<script>
+  import '../scripts/hero';
+</script>
+
 <style>
   .hero {
     display: grid;
@@ -100,6 +104,34 @@ const nextEvent = upcoming[0];
   .hero-work {
     display: block;
     text-decoration: none;
+  }
+
+  /*
+   * Hero motion. Title and tagline wait (hidden) for GSAP, with a CSS failsafe in case
+   * scripts never run. The hero work fades in with pure CSS so it never waits on JS.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-title:not(.is-ready),
+    .hero-tagline:not(.is-ready) {
+      opacity: 0;
+      animation: hero-failsafe 0.4s ease-out 2s forwards;
+    }
+
+    .hero-work {
+      animation: hero-work-in 0.9s var(--ease-out) 0.25s backwards;
+    }
+  }
+
+  @keyframes hero-failsafe {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes hero-work-in {
+    from {
+      opacity: 0;
+    }
   }
 
   .hero-work :global(img) {
