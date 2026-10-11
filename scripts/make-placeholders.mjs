@@ -42,8 +42,8 @@ for (const work of works) {
     <rect x="${w * 0.05}" y="${h - fs * 3}" width="${fs * 10}" height="${fs * 1.8}" fill="#000" opacity="0.55"/>
     <text x="${w * 0.05 + fs * 0.6}" y="${h - fs * 1.75}" font-family="monospace" font-size="${fs}" letter-spacing="${fs * 0.15}" fill="#fff">PLACEHOLDER</text>
   </svg>`;
-  const dir = `src/content/works/${work.slug}`;
+  const dir = 'src/assets/works';
   mkdirSync(dir, { recursive: true });
-  await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile(`${dir}/image.jpg`);
-  console.log('wrote', dir);
+  await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile(`${dir}/${work.slug}.jpg`);
+  console.log('wrote', `${dir}/${work.slug}.jpg`);
 }

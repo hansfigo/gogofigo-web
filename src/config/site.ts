@@ -1,5 +1,6 @@
-// Single place for everything that changes often: links, contact, commission info.
-// Values marked TODO are placeholders until Figo fills them in.
+// Code-side settings. Things Figo edits often (bio, email, socials, commission)
+// live in src/data/settings.json, which Pages CMS edits. Values marked TODO are placeholders.
+import settings from '../data/settings.json';
 
 export type SocialLink = {
   label: string;
@@ -13,20 +14,17 @@ export type CommissionTier = {
 };
 
 // Short bio for the Info page. Keep it this short.
-export const bio = [
-  'Hi, I’m Figo. I like to draw.',
-  'I draw digitally in Clip Studio Paint and Procreate, and paint with acrylic on canvas.',
-];
+export const bio: string[] = settings.bio.filter(Boolean);
 
 export const site = {
   name: 'gogofigo',
-  tagline: 'Illustration & acrylic painting',
+  tagline: settings.tagline,
   description:
     'gogofigo is the art name of Figo, an illustrator and acrylic painter. Anime-proportioned figures, painterly flat-brush strokes, blues and indigos.',
   // TODO: replace with the real domain once it exists.
   url: 'https://gogofigo-web.pages.dev',
   locale: 'en',
-  email: 'hello@example.com', // TODO
+  email: settings.email, // TODO in settings.json
   // Cloudflare Web Analytics beacon token. Leave empty to disable.
   analyticsToken: '', // TODO
 } as const;
@@ -37,18 +35,10 @@ export const nav = [
   { label: 'Commission', href: '/commission' },
 ] as const;
 
-export const socials: SocialLink[] = [
-  { label: 'Instagram', handle: '@hellogogofigo', href: 'https://instagram.com/hellogogofigo' },
-  { label: 'X', handle: '@hellogogofigo', href: 'https://x.com/hellogogofigo' },
-  { label: 'VGen', handle: 'gogofigo', href: 'https://vgen.co/gogofigo' }, // TODO
-];
+export const socials: SocialLink[] = settings.socials.filter((s) => s.label && s.href);
 
 export const commission = {
-  open: true,
-  vgenUrl: 'https://vgen.co/gogofigo', // TODO
-  tiers: [
-    { name: 'Bust', priceFrom: 'from $XX' }, // TODO
-    { name: 'Half body', priceFrom: 'from $XX' }, // TODO
-    { name: 'Full illustration', priceFrom: 'from $XX' }, // TODO
-  ] satisfies CommissionTier[],
+  open: settings.commission.open,
+  vgenUrl: settings.commission.vgenUrl, // TODO in settings.json
+  tiers: settings.commission.tiers.filter((t) => t.name) satisfies CommissionTier[],
 };
