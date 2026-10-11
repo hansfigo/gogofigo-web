@@ -20,7 +20,7 @@ export const site = {
   name: 'gogofigo',
   tagline: settings.tagline,
   description:
-    'gogofigo is the art name of Figo, an illustrator and acrylic painter. Anime-proportioned figures, painterly flat-brush strokes, blues and indigos.',
+    'gogofigo is Figo, an illustrator and acrylic painter. Digital illustration and acrylic paintings.',
   url: 'https://hellogogofigo.com',
   locale: 'en',
   email: settings.email, // TODO in settings.json

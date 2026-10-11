@@ -1,0 +1,150 @@
+---
+/**
+ * Faint NieR-style cubes floating in the background. Fixed layer behind everything,
+ * each cube drifts at its own speed while scrolling (parallax) and wraps around the
+ * viewport. Flat isometric SVG in the block tokens, so it follows dark mode.
+ * Vanilla JS, transform only. Static with prefers-reduced-motion.
+ */
+// x, y: start position in % of the layer; s: size in px; v: parallax speed; phone: also shown on phones.
+const cubes = [
+  { x: 4, y: 16, s: 26, v: 0.12, phone: false },
+  { x: 72, y: 58, s: 20, v: 0.14, phone: true },
+  { x: 90, y: 9, s: 40, v: 0.24, phone: true },
+  { x: 74, y: 44, s: 16, v: 0.08, phone: false },
+  { x: 10, y: 62, s: 34, v: 0.18, phone: false },
+  { x: 93, y: 74, s: 22, v: 0.3, phone: true },
+  { x: 42, y: 90, s: 13, v: 0.1, phone: false },
+  { x: 56, y: 24, s: 11, v: 0.05, phone: false },
+];
+---
+
+<div class="cube-field" aria-hidden="true" data-cube-field transition:persist>
+  {
+    cubes.map((c, i) => (
+      <svg
+        class:list={['cube', { 'desktop-only': !c.phone }]}
+        viewBox="0 0 100 100"
+        width={c.s}
+        height={c.s}
+        style={`left:${c.x}%;--y:${c.y};--d:${6 + (i % 4) * 1.5}s`}
+        data-speed={c.v}
+      >
+        <polygon class="top" points="50,4 94,29 50,54 6,29" />
+        <polygon class="front" points="6,29 50,54 50,98 6,73" />
+        <polygon class="side" points="50,54 94,29 94,73 50,98" />
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .cube-field {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .cube {
+    position: absolute;
+    top: 0;
+    transform: translate3d(0, calc(var(--y) * 1vh), 0);
+    will-change: transform;
+  }
+
+  .cube polygon {
+    stroke: var(--block-edge);
+    stroke-width: 1;
+    stroke-linejoin: round;
+  }
+
+  .top {
+    fill: var(--block-top);
+  }
+
+  .front {
+    fill: var(--block-front);
+  }
+
+  .side {
+    fill: var(--block-side);
+  }
+
+  /* Slow idle float on the shapes, separate from the scroll transform on the svg. */
+  .cube polygon {
+    animation: bob var(--d) ease-in-out infinite alternate;
+  }
+
+  @keyframes bob {
+    to {
+      transform: translateY(6px);
+    }
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .cube-field {
+      left: var(--side-width);
+    }
+
+    .desktop-only {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cube polygon {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let cubes: { el: SVGElement; y: number; speed: number; size: number }[] = [];
+  let ticking = false;
+
+  function measure() {
+    const field = document.querySelector<HTMLElement>('[data-cube-field]');
+    if (!field) return;
+    const h = window.innerHeight;
+    cubes = [...field.querySelectorAll<SVGElement>('.cube')].map((el) => ({
+      el,
+      y: (parseFloat(el.style.getPropertyValue('--y')) / 100) * h,
+      speed: Number(el.dataset.speed),
+      size: el.getBoundingClientRect().height || 40,
+    }));
+    update();
+  }
+
+  function update() {
+    ticking = false;
+    const h = window.innerHeight;
+    const sy = window.scrollY;
+    for (const c of cubes) {
+      // Drift up with the scroll and wrap, so cubes keep coming back on long pages.
+      const span = h + c.size * 2;
+      const y = ((((c.y - sy * c.speed + c.size) % span) + span) % span) - c.size;
+      c.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+    }
+  }
+
+  if (!reduce.matches) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', measure, { passive: true });
+    document.addEventListener('astro:page-load', measure);
+  }
+</script>

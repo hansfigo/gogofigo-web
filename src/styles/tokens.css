@@ -20,26 +20,26 @@
   color-scheme: light dark;
 
   /* Color: light */
-  --bg: #f4f5f6;
+  --bg: #f4f4f2;
   --bg-elevated: #ffffff;
-  --bg-translucent: rgb(244 245 246 / 0.78);
-  --fg: #111214;
-  --gray-1: #eceef0;
-  --gray-2: #e1e4e7;
-  --gray-3: #c6cacf;
-  --gray-4: #8b9096; /* decorative only, below AA for text */
-  --gray-5: #5f646a; /* secondary text, AA on --bg */
-  --gray-6: #383c41;
+  --bg-translucent: rgb(244 244 242 / 0.78);
+  --fg: #141413;
+  --gray-1: #ebebe8;
+  --gray-2: #e0e0dc;
+  --gray-3: #c7c7c2;
+  --gray-4: #8d8d88; /* decorative only, below AA for text */
+  --gray-5: #5f5f5a; /* secondary text, AA on --bg */
+  --gray-6: #3a3a37;
 
   /* Monolith blocks (NieR-like white architecture): lit top, front, shaded side */
-  --block-top: #fbfbfc;
-  --block-front: #e9ebee;
-  --block-side: #d9dde2;
-  --block-edge: rgb(17 18 20 / 0.05);
-  --hairline: rgb(17 17 19 / 0.09);
-  --accent: #2f4fb3; /* indigo, AA on --bg */
-  --accent-soft: rgb(47 79 179 / 0.1);
-  --focus: #2f4fb3;
+  --block-top: #fbfbf9;
+  --block-front: #e9e9e5;
+  --block-side: #dadad5;
+  --block-edge: rgb(20 20 19 / 0.05);
+  --hairline: rgb(20 20 19 / 0.09);
+  --accent: var(--fg); /* monochrome: the art is the only colour on the page */
+  --accent-soft: rgb(20 20 19 / 0.08);
+  --focus: var(--fg);
 
   /* Type */
   --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -92,23 +92,23 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0c0c0d;
-    --bg-elevated: #161618;
-    --bg-translucent: rgb(12 12 13 / 0.72);
-    --fg: #ededeb;
-    --gray-1: #18181a;
-    --gray-2: #222225;
-    --gray-3: #3a3a3d;
-    --gray-4: #6b6b6f;
-    --gray-5: #a1a1a4;
-    --gray-6: #cfcfd1;
-    --block-top: #222326;
-    --block-front: #17181a;
-    --block-side: #111214;
+    --bg: #0d0d0c;
+    --bg-elevated: #171716;
+    --bg-translucent: rgb(13 13 12 / 0.72);
+    --fg: #ededea;
+    --gray-1: #191918;
+    --gray-2: #232321;
+    --gray-3: #3b3b38;
+    --gray-4: #6d6d69;
+    --gray-5: #a3a39e;
+    --gray-6: #d0d0cc;
+    --block-top: #232321;
+    --block-front: #181817;
+    --block-side: #121211;
     --block-edge: rgb(237 237 235 / 0.06);
     --hairline: rgb(237 237 235 / 0.1);
-    --accent: #7fa2ff;
-    --accent-soft: rgb(127 162 255 / 0.14);
-    --focus: #7fa2ff;
+    --accent: var(--fg);
+    --accent-soft: rgb(237 237 234 / 0.12);
+    --focus: var(--fg);
   }
 }

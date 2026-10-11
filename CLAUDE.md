@@ -32,7 +32,7 @@ src/
   lib/works.ts          getWorks(), getFeaturedWorks(), workUrl(), mediumLabel
   lib/events.ts         getEvents() → { upcoming, past }, formatEventDate()
   layouts/Base.astro    <head>, SEO, nav, footer, client router, page transition
-  components/           Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
+  components/           CubeField, Nav, Footer, Seo, WorkImage, WorkCard, WorkGrid,
                         GalleryFilter, Lightbox, Placeholder
   scripts/motion.ts     GSAP setup, shared easing, reduced-motion check
   scripts/reveal.ts     square-tile reveal for work images (imported by WorkGrid)
@@ -47,19 +47,21 @@ public/_headers         Cloudflare caching headers
 
 ## Design tokens (src/styles/tokens.css)
 
-Concept: "white box" artist portfolio. Quiet off-white room, art is the only focus, almost no text.
+Concept: monochrome "white box" artist portfolio. Quiet off-white room, art is the only focus, almost no text.
 Figo's feedback (2026-10-11): the first version felt like a company profile. Keep copy to a minimum:
 no section headings, no CTA blocks, no uppercase label clutter. Captions are tiny (title + year).
 Navigation: on desktop a fixed left column (wordmark, tagline, Work/Info/Commission, socials at the bottom),
 no bar, blur or border. On phones a plain text line at the top that scrolls away.
-NieR-style accents (Figo, 2026-10-11): cool off-white palette, square corners everywhere, a small
+NieR-style accents (Figo, 2026-10-11): neutral off-white palette, square corners everywhere, a small
 square as the only UI marker (current nav item, active filter, commission status), white block
 "monolith" SVG decorations (components/Monolith.astro: tower on Info/Commission/404 desktop,
-skyline on phones and at the end of Home), and images revealed by a grid of shrinking squares.
+skyline on phones and at the end of Home), images revealed by a grid of shrinking squares, and a few
+faint cubes floating in the background (components/CubeField.astro, fixed layer, scroll parallax in
+vanilla JS, 3 on phones / 7 on desktop). Keep them faint and few; they must never compete with the art.
 Home *is* the work: an editorial grid where works drift between columns with lots of air.
 
-- **Color (light / dark):** `--bg` #f7f7f4 / #0c0c0d (never pure white/black), `--fg` #111113 / #ededeb, grays `--gray-1…6`, `--hairline` for 1px UI lines.
-- **Accent:** `--accent` indigo (#2f4fb3 light, #7fa2ff dark). Use sparingly: active nav link, "commissions open", small details. Never for large areas.
+- **Color (light / dark):** strictly monochrome, neutral grays with no blue tint (Figo, 2026-10-11: the cool tint and indigo clashed with the warm art). `--bg` #f4f4f2 / #0d0d0c (never pure white/black), `--fg` #141413 / #ededea, grays `--gray-1…6`, `--hairline` for 1px UI lines.
+- **Accent:** `--accent` is `--fg`. No colour in the UI; the art is the only colour on the page.
 - **Dark mode** follows the system (`prefers-color-scheme`). No toggle.
 - **Type:** Geist for everything; headings 650–700 weight with tight tracking (`--tracking-tight`). Body 15px, line-height 1.6. Geist Mono via `.label` for metadata (year, medium, size) and small labels: 11px, uppercase, wide tracking.
 - **Spacing:** 4px scale `--space-1…10`; `--section-gap` between page sections; `--gutter` page side padding.
