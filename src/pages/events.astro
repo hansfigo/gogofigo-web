@@ -1,11 +1,132 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getEvents, formatEventDate } from '../lib/events';
+
+const { upcoming, past } = await getEvents();
 ---
 
-<Base title="Events">
+<Base title="Events" description="Where to find gogofigo in person: conventions, booths and exhibitions.">
   <section class="page-header container">
     <p class="label">Events</p>
-    <h1 class="page-title">Events</h1>
-    <p class="page-lede">Conventions and booths. Coming in stage 3.</p>
+    <h1 class="page-title">Find me in person</h1>
+    <p class="page-lede">Conventions, booths and the occasional exhibition.</p>
   </section>
+
+  <section class="container" aria-labelledby="upcoming">
+    <h2 class="visually-hidden" id="upcoming">Upcoming</h2>
+    {upcoming.length === 0 && <p class="muted">No upcoming events right now. Check back soon.</p>}
+    <ul class="upcoming">
+      {
+        upcoming.map((e) => (
+          <li class="event-feature">
+            <p class="label accent">Upcoming</p>
+            <h3 class="event-title">{e.data.title}</h3>
+            <dl class="event-facts">
+              <div>
+                <dt class="label">Date</dt>
+                <dd>{formatEventDate(e)}</dd>
+              </div>
+              <div>
+                <dt class="label">Location</dt>
+                <dd>{e.data.location}</dd>
+              </div>
+              {e.data.booth && (
+                <div>
+                  <dt class="label">Booth</dt>
+                  <dd>{e.data.booth}</dd>
+                </div>
+              )}
+            </dl>
+            {e.data.description && <p class="muted">{e.data.description}</p>}
+            {e.data.link && (
+              <a href={e.data.link} class="button button-secondary" target="_blank" rel="noopener">
+                Event info <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    past.length > 0 && (
+      <section class="section container" aria-labelledby="past">
+        <div class="section-head">
+          <h2 class="section-title" id="past">Past events</h2>
+          <span class="label">{past.length}</span>
+        </div>
+        <ul class="past">
+          {past.map((e) => (
+            <li class="past-item">
+              <span class="label">{formatEventDate(e)}</span>
+              <span class="past-title">{e.data.title}</span>
+              <span class="muted past-loc">{e.data.location}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </Base>
+
+<style>
+  .upcoming,
+  .past {
+    list-style: none;
+    padding: 0;
+  }
+
+  .upcoming {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .event-feature {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--space-6) 0;
+    border-block: 1px solid var(--hairline);
+  }
+
+  .accent {
+    color: var(--accent);
+  }
+
+  .event-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  .event-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  .event-facts dd {
+    margin-top: var(--space-1);
+  }
+
+  .past-item {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .past-title {
+    font-weight: 500;
+  }
+
+  @media (min-width: 48rem) {
+    .past-item {
+      grid-template-columns: 12rem 1fr auto;
+      align-items: baseline;
+      gap: var(--space-5);
+    }
+  }
+</style>

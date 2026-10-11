@@ -1,11 +1,99 @@
 ---
 import Base from '../layouts/Base.astro';
+import SlotStatus from '../components/SlotStatus.astro';
+import { site, socials, commission } from '../config/site';
+import { getEvents, formatEventDate } from '../lib/events';
+
+const { upcoming } = await getEvents();
+const nextEvent = upcoming[0];
+
+const links = [
+  { label: 'Gallery', detail: 'All works', href: '/gallery', external: false },
+  {
+    label: 'Commission',
+    detail: commission.open ? 'Open now' : 'Closed',
+    href: '/commission',
+    external: false,
+  },
+  ...(nextEvent
+    ? [{ label: nextEvent.data.title, detail: formatEventDate(nextEvent), href: '/events', external: false }]
+    : []),
+  ...socials.map((s) => ({ label: s.label, detail: s.handle, href: s.href, external: true })),
+  { label: 'Email', detail: site.email, href: `mailto:${site.email}`, external: false },
+];
 ---
 
-<Base title="Links">
-  <section class="page-header container">
-    <p class="label">Links</p>
-    <h1 class="page-title">Links</h1>
-    <p class="page-lede">Everything in one place. Coming in stage 3.</p>
+<Base title="Links" description="All gogofigo links in one place: gallery, commissions, events and socials.">
+  <section class="links container">
+    <h1 class="links-name">{site.name}</h1>
+    <p class="muted">{site.tagline}</p>
+    <SlotStatus />
+
+    <ul class="link-list">
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href} {...(l.external ? { target: '_blank', rel: 'me noopener' } : {})}>
+              <span class="link-label">{l.label}</span>
+              <span class="label link-detail">
+                {l.detail}
+                {l.external && <span aria-hidden="true"> ↗</span>}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </Base>
+
+<style>
+  .links {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    max-width: 32rem;
+    padding-top: calc(var(--nav-height) + var(--space-8));
+  }
+
+  .links-name {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  .link-list {
+    width: 100%;
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .link-list a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 56px;
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+  }
+
+  .link-label {
+    font-size: var(--text-lg);
+    font-weight: 550;
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .link-list a:hover .link-label {
+    color: var(--accent);
+  }
+
+  .link-detail {
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+</style>
