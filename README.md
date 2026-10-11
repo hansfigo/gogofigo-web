@@ -37,8 +37,24 @@ Pages project → **Custom domains → Set up a domain**. Then update `url` in `
 
 Cloudflare dashboard → **Web Analytics → Add a site** and copy the token into `analyticsToken` in `src/config/site.ts`.
 
-## Editing content
+## Editing content (Pages CMS)
 
-- Works: `src/content/works/<slug>/` (see CLAUDE.md for the frontmatter)
-- Events: `src/content/events/`
-- Links, email, commission status and prices: `src/config/site.ts`
+Works, events, commission status and prices, bio, email and socials are edited in [Pages CMS](https://pagescms.org), a free editor that saves straight to this GitHub repo. No code needed.
+
+1. Go to <https://app.pagescms.org> and sign in with GitHub.
+2. Install the Pages CMS GitHub app when asked, for `hansfigo/gogofigo-web` only.
+3. Open the repo, branch `main`. The sidebar shows **Works**, **Events**, **Settings** and **Media**.
+4. Edit and press **Save**. Each save is a commit, and Cloudflare Pages rebuilds the site (about a minute).
+
+Adding a work: **Works → Add an entry**, upload the image (JPG or PNG, long edge around 2500px; the site makes the small versions), fill in title, alt text, year and medium, save. The title becomes the URL (`/work/<title>`).
+
+Removing the sample art: delete the six works marked **Placeholder** and their images under **Media**.
+
+Events move from upcoming to past only when the site rebuilds, so after an event ends, save anything (or redeploy in Cloudflare).
+
+The CMS config is `.pages.yml`. Where things live in the code:
+
+- Works: `src/content/works/<slug>.md`, images in `src/assets/works/`
+- Events: `src/content/events/<slug>.md`
+- Settings (commission, bio, email, socials, tagline): `src/data/settings.json`
+- Domain, analytics token, site description: `src/config/site.ts`

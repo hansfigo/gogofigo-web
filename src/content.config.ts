@@ -2,19 +2,23 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+// Pages CMS may save an emptied optional field as "" or null. Treat both as "not set".
+const blank = (v: unknown) => (v === '' || v === null ? undefined : v);
+const optional = <T extends z.ZodType>(schema: T) => z.preprocess(blank, schema.optional());
+
 const works = defineCollection({
-  // One folder per work: src/content/works/<slug>/index.md + image file.
-  loader: glob({ pattern: '*/index.md', base: './src/content/works' }),
+  // One file per work: src/content/works/<slug>.md. The file name is the URL slug.
+  // Images live in src/assets/works/ (the Pages CMS media folder).
+  loader: glob({ pattern: '*.md', base: './src/content/works' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      slug: z.string().regex(/^[a-z0-9-]+$/, 'Use lowercase letters, numbers and dashes'),
-      year: z.number().int(),
+      year: z.coerce.number().int(),
       medium: z.enum(['digital', 'acrylic']),
-      size: z.string().optional(),
+      size: optional(z.string()),
       featured: z.boolean().default(false),
-      order: z.number().optional(),
-      description: z.string().optional(),
+      order: optional(z.coerce.number()),
+      description: optional(z.string()),
       alt: z.string().min(1, 'Alt text is required'),
       image: image(),
       placeholder: z.boolean().default(false),
@@ -26,11 +30,11 @@ const events = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    endDate: z.coerce.date().optional(),
+    endDate: optional(z.coerce.date()),
     location: z.string(),
-    booth: z.string().optional(),
-    description: z.string().optional(),
-    link: z.url().optional(),
+    booth: optional(z.string()),
+    description: optional(z.string()),
+    link: optional(z.url()),
   }),
 });
 

@@ -22,10 +22,12 @@ npm run preview   # serve dist/ locally
 
 ```
 src/
-  config/site.ts        all editable info: name, tagline, URL, email, analytics token,
-                        nav, socials, commission (open/closed, tiers, steps, VGen URL)
+  config/site.ts        code-side settings (name, URL, analytics token, nav); re-exports
+                        settings.json as bio, socials, commission, site.email/tagline
+  data/settings.json    CMS-edited: tagline, bio, email, socials, commission (open, VGen URL, tiers)
   content.config.ts     schemas for the works and events collections
-  content/works/<slug>/ index.md + image file (one folder per work)
+  content/works/<slug>.md  one file per work; file name = URL slug
+  assets/works/         work images (Pages CMS media folder)
   content/events/       one .md per event
   lib/works.ts          getWorks(), getFeaturedWorks(), workUrl(), mediumLabel
   lib/events.ts         getEvents() → { upcoming, past }, formatEventDate()
@@ -74,16 +76,24 @@ Home *is* the work: an editorial grid where works drift between columns with lot
 - `prefers-reduced-motion: reduce` disables everything: scripts bail early, CSS transitions and view transitions are off.
 - Client router note: module scripts run once. Re-initialize per page on `astro:page-load`; register document-level listeners once. ScrollTriggers are killed on `astro:before-swap`.
 
-## Adding a work
+## CMS (Pages CMS)
 
-1. Create `src/content/works/<slug>/` (lowercase, dashes).
-2. Put the image there (JPG/PNG, long edge ≥ 2000px is ideal). Astro generates AVIF/WebP sizes.
-3. Add `index.md`:
+Figo edits content in Pages CMS (app.pagescms.org, GitHub login). Config: `.pages.yml`. It covers
+Works, Events and Settings (`src/data/settings.json`). Each save is a commit to `main`.
+- Keep `.pages.yml` fields in sync with `src/content.config.ts` and `settings.json` when changing either.
+- The CMS can save emptied optional fields as `""`/`null` and numbers as strings; the schemas
+  accept both (`optional()` helper, `z.coerce.number()`). Keep that when adding fields.
+- Images are uploaded to `src/assets/works/` and written as `/src/assets/works/<file>` in
+  frontmatter. Astro resolves that root-relative path through Vite, so `image()` optimisation works.
+
+## Adding a work (by hand)
+
+1. Put the image in `src/assets/works/` (JPG/PNG, long edge ≥ 2000px is ideal). Astro generates AVIF/WebP sizes.
+2. Add `src/content/works/<slug>.md` (lowercase, dashes; the file name is the URL):
 
 ```md
 ---
 title: Quiet Room
-slug: quiet-room
 year: 2025
 medium: digital        # digital | acrylic
 size: 40×60 cm         # optional, canvases only
@@ -91,11 +101,11 @@ featured: true         # reserved for highlighting; home shows every work
 order: 1               # optional; lower comes first
 description: Optional, one short line.
 alt: Required. Describe what is in the picture for screen readers.
-image: ./image.jpg
+image: /src/assets/works/quiet-room.jpg
 ---
 ```
 
-Keep `description` short or leave it out. Remove `placeholder: true` from real works (it shows the "Placeholder" tag). Delete the sample folders once real work is in.
+Keep `description` short or leave it out. Remove `placeholder: true` from real works (it shows the "Placeholder" tag). Delete the sample works and their images once real work is in.
 
 ## Adding an event
 
@@ -117,7 +127,7 @@ Upcoming vs past is decided **at build time**. Redeploy after an event ends (or 
 
 ## Placeholders still to fill (search for `TODO`)
 
-Instagram / X / VGen handles, email, domain (`site.url` and `public/robots.txt`), commission prices, CF23 details, Cloudflare Web Analytics token.
+VGen handle, email, prices (all in `src/data/settings.json`), domain (`site.url` and `public/robots.txt`), CF23 details, Cloudflare Web Analytics token.
 
 ## Quality bar
 
