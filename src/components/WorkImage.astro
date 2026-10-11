@@ -21,6 +21,7 @@ const usable = widths.filter((w) => w <= image.width);
   widths={usable.length ? usable : [image.width]}
   sizes={sizes}
   formats={['avif', 'webp']}
+  fallbackFormat="jpg"
   quality={78}
   loading={eager ? 'eager' : 'lazy'}
   decoding={eager ? 'sync' : 'async'}

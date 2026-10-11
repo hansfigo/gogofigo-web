@@ -1,11 +1,19 @@
 ---
+interface Props {
+  /** Mediums that have at least one work. The filter hides itself when there is nothing to choose. */
+  mediums: string[];
+}
+
+const { mediums } = Astro.props;
 const options = [
   { value: 'all', label: 'All' },
   { value: 'digital', label: 'Digital' },
   { value: 'acrylic', label: 'Acrylic' },
-] as const;
+].filter((o) => o.value === 'all' || mediums.includes(o.value));
+const show = options.length > 2;
 ---
 
+{show && (
 <div class="filter" role="group" aria-label="Filter by medium" data-filter>
   {
     options.map((o, i) => (
@@ -15,6 +23,7 @@ const options = [
     ))
   }
 </div>
+)}
 
 <style>
   .filter {
