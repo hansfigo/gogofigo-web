@@ -12,10 +12,10 @@ export type CommissionTier = {
   priceFrom: string;
 };
 
-// Short bio for the Info page. Keep it to two or three sentences.
+// Short bio for the Info page. Keep it this short.
 export const bio = [
-  'gogofigo is Figo, an illustrator and acrylic painter.', // TODO: Figo to rewrite
-  'Fragile, intimate moments and quiet rooms, in blue and indigo.', // TODO
+  'Hi, I’m Figo. I like to draw.',
+  'Quiet rooms, fragile moments, and a lot of blue.',
 ];
 
 export const site = {
@@ -38,8 +38,8 @@ export const nav = [
 ] as const;
 
 export const socials: SocialLink[] = [
-  { label: 'Instagram', handle: '@gogofigo', href: 'https://instagram.com/gogofigo' }, // TODO
-  { label: 'X', handle: '@gogofigo', href: 'https://x.com/gogofigo' }, // TODO
+  { label: 'Instagram', handle: '@hellogogofigo', href: 'https://instagram.com/hellogogofigo' },
+  { label: 'X', handle: '@hellogogofigo', href: 'https://x.com/hellogogofigo' },
   { label: 'VGen', handle: 'gogofigo', href: 'https://vgen.co/gogofigo' }, // TODO
 ];
 

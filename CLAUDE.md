@@ -117,7 +117,7 @@ Upcoming vs past is decided **at build time**. Redeploy after an event ends (or 
 
 ## Placeholders still to fill (search for `TODO`)
 
-Instagram / X / VGen handles, email, domain (`site.url` and `public/robots.txt`), commission prices, CF23 details, `bio` lines in site.ts, Cloudflare Web Analytics token.
+Instagram / X / VGen handles, email, domain (`site.url` and `public/robots.txt`), commission prices, CF23 details, Cloudflare Web Analytics token.
 
 ## Quality bar
 
