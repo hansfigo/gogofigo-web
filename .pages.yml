@@ -29,7 +29,7 @@ content:
         label: Image
         type: image
         required: true
-        description: JPG or PNG, long edge around 2500px. The site makes smaller versions itself.
+        description: JPG, long edge around 2500px, under 3 MB (bigger uploads fail). The site makes smaller versions itself.
         options:
           media: works
       - name: alt

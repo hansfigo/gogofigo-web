@@ -45,7 +45,7 @@ Works, events, commission status and prices, bio, email and socials are edited i
 3. Open the repo, branch `main`. The sidebar shows **Works**, **Events**, **Settings** and **Media**.
 4. Edit and press **Save**. Each save is a commit, and Cloudflare Pages rebuilds the site (about a minute).
 
-Adding a work: **Works → Add an entry**, upload the image (JPG or PNG, long edge around 2500px; the site makes the small versions), fill in title, alt text, year and medium, save. The title becomes the URL (`/work/<title>`).
+Adding a work: **Works → Add an entry**, upload the image (JPG, long edge around 2500px, under 3 MB: Pages CMS rejects bigger files; the site makes the small versions), fill in title, alt text, year and medium, save. The title becomes the URL (`/work/<title>`).
 
 Removing the sample art: delete the six works marked **Placeholder** and their images under **Media**.
 
