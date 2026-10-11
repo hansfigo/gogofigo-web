@@ -127,7 +127,7 @@ Upcoming vs past is decided **at build time**. Redeploy after an event ends (or 
 
 ## Placeholders still to fill (search for `TODO`)
 
-VGen handle, email, prices (all in `src/data/settings.json`), domain (`site.url` and `public/robots.txt`), CF23 details, Cloudflare Web Analytics token.
+VGen handle, email, prices (all in `src/data/settings.json`), CF23 details, Cloudflare Web Analytics token.
 
 ## Quality bar
 

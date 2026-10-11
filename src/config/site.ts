@@ -21,8 +21,7 @@ export const site = {
   tagline: settings.tagline,
   description:
     'gogofigo is the art name of Figo, an illustrator and acrylic painter. Anime-proportioned figures, painterly flat-brush strokes, blues and indigos.',
-  // TODO: replace with the real domain once it exists.
-  url: 'https://gogofigo-web.pages.dev',
+  url: 'https://hellogogofigo.com',
   locale: 'en',
   email: settings.email, // TODO in settings.json
   // Cloudflare Web Analytics beacon token. Leave empty to disable.

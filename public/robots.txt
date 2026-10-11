@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gogofigo-web.pages.dev/sitemap-index.xml
+Sitemap: https://hellogogofigo.com/sitemap-index.xml

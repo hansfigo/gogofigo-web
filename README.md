@@ -31,7 +31,7 @@ npm run preview
 
 ### Custom domain
 
-Pages project → **Custom domains → Set up a domain**. Then update `url` in `src/config/site.ts` and the sitemap line in `public/robots.txt`.
+The site runs on `hellogogofigo.com` (bought at Cloudflare Registrar). Pages project → **Custom domains** lists it. If the domain ever changes, update `url` in `src/config/site.ts` and the sitemap line in `public/robots.txt`.
 
 ### Analytics
 
