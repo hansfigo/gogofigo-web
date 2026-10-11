@@ -42,7 +42,6 @@ src/
                         commission, links (link-in-bio), 404
                         /gallery, /about, /events redirect (public/_redirects only; duplicating
                         them in astro.config.ts breaks the Cloudflare deploy)
-scripts/make-placeholders.mjs   regenerates the sample placeholder images
 public/_headers         Cloudflare caching headers
 ```
 
@@ -106,7 +105,7 @@ image: /src/assets/works/quiet-room.jpg
 ---
 ```
 
-Keep `description` short or leave it out. Remove `placeholder: true` from real works (it shows the "Placeholder" tag). Delete the sample works and their images once real work is in.
+Keep `description` short or leave it out. Remove `placeholder: true` from real works (it shows the "Placeholder" tag).
 
 ## Adding an event
 

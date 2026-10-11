@@ -8,13 +8,15 @@ interface Props {
 }
 
 const { work, eager = false } = Astro.props;
-const { title, year, medium } = work.data;
+const { title, year, medium, image } = work.data;
+// Landscape works get a wide row so they don't shrink into a narrow column.
+const wide = image.width / image.height >= 1.25;
 ---
 
-<li class="work-card" data-medium={medium}>
+<li class:list={['work-card', { 'is-wide': wide }]} data-medium={medium}>
   <a href={workUrl(work)} class="work-link" data-lightbox-trigger={work.id}>
     <div class="work-frame" data-reveal-frame>
-      <WorkImage work={work} sizes="(min-width: 64rem) 55vw, 100vw" eager={eager} />
+      <WorkImage work={work} sizes={wide ? '(min-width: 64rem) 75vw, 100vw' : '(min-width: 64rem) 55vw, 100vw'} eager={eager} />
     </div>
     <p class="work-caption">
       <span>{title}</span>

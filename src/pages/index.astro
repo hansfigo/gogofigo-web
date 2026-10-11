@@ -14,7 +14,7 @@ const cover = works[0];
   <h1 class="visually-hidden">{site.name}: {site.tagline}</h1>
   <div class="bar container">
     <p class="tagline">{site.tagline}</p>
-    <GalleryFilter />
+    <GalleryFilter mediums={[...new Set(works.map((w) => w.data.medium))]} />
   </div>
   <section class="container" aria-label="Works">
     <WorkGrid works={works} eagerCount={1} />

@@ -41,6 +41,11 @@ const { works, eagerCount = 0 } = Astro.props;
     justify-self: center;
   }
 
+  .work-grid > :global(li.is-wide) {
+    width: 100% !important;
+    justify-self: stretch !important;
+  }
+
   @media (min-width: 48rem) {
     .work-grid {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -78,6 +83,11 @@ const { works, eagerCount = 0 } = Astro.props;
 
     .work-grid > :global(li:nth-child(6n)) {
       grid-column: 7 / span 6;
+    }
+
+    .work-grid > :global(li.is-wide) {
+      grid-column: 2 / span 10 !important;
+      margin-top: 0 !important;
     }
   }
 </style>
